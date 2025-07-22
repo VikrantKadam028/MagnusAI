@@ -1156,7 +1156,7 @@
 
             // --- API Call Integration ---
             try {
-                const apiKey = "AIzaSyDSGy7RDlFf_YzKXF4DtKrroCUmofQg1yg"; // If you want to use models other than gemini-2.0-flash or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
+                const apiKey = process.env.GEMINI_API_KEY; // If you want to use models other than gemini-2.0-flash or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 let chatHistory = [];
