@@ -41,8 +41,22 @@ app.use(
   })
 );
 
+// === Root Route ===
+app.get("/", (req, res) => {
+  if (req.session.user) {
+    // If user is already logged in, redirect to dashboard
+    return res.redirect("/dashboard");
+  }
+  // Otherwise, redirect to the registration page
+  res.redirect("/register");
+});
+
 // === Register Page ===
 app.get("/register", (req, res) => {
+  // If user is already logged in, redirect to dashboard
+  if (req.session.user) {
+    return res.redirect("/dashboard");
+  }
   res.render("register", { successMessage: undefined });
 });
 
@@ -91,6 +105,10 @@ app.post("/register", async (req, res) => {
 
 // === Login Page ===
 app.get("/login", (req, res) => {
+  // If user is already logged in, redirect to dashboard
+  if (req.session.user) {
+    return res.redirect("/dashboard");
+  }
   res.render("login");
 });
 app.post("/check-email", async (req, res) => {

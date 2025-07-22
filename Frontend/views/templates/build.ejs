@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magnus | Build</title>
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Inconsolata:wght@200..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Righteous&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
     <style>
+        /* Base styles */
         * {
             margin: 0;
             padding: 0;
@@ -18,89 +19,92 @@
         }
 
         body {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            background: #0d0d0d; /* Solid black background */
             min-height: 100vh;
             color: white;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Aurora background - Removed glowing animation */
+        .aurora-bg {
+            display: none; /* Hide aurora background */
         }
 
         .container {
             display: flex;
             height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding: 15px;
+            gap: 15px;
         }
 
         /* Left Sidebar */
         .sidebar {
-            width: 340px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            width: 300px;
+            background: rgba(255, 255, 255, 0.08); /* Frosted glass base */
+            backdrop-filter: blur(30px);
+            border-right: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
             padding: 20px;
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
+            /* Removed overflow-y: auto from sidebar */
+            box-shadow: none; /* Removed glowing shadow */
+            flex-shrink: 0;
         }
 
         .logo {
             font-family: 'Audiowide', sans-serif;
             font-size: 1.8rem;
             margin-bottom: 30px;
+            font-weight: 800;
             text-align: center;
-            background: linear-gradient(45deg, #00d4ff, #0099cc, #00ff80);
-            -webkit-background-clip: text;
+            color:#ff4d00;
+            /* background: linear-gradient(45deg, #ff4500, #ff8c00); /* Orange/red gradient */
+            /* -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: logoGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes logoGlow {
-            0%, 100% { filter: brightness(1) drop-shadow(0 0 5px rgba(0, 212, 255, 0.3)); }
-            50% { filter: brightness(1.2) drop-shadow(0 0 15px rgba(0, 212, 255, 0.6)); }
+            animation: none; */
         }
 
         .chat-history {
             flex: 1;
             margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto; /* Added scrollbar to chat-history */
+            max-height: calc(100vh - 250px); /* Adjust max-height to fit within sidebar */
         }
 
         .chat-item {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             padding: 18px;
-            margin-bottom: 12px;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
             overflow: hidden;
+            flex-shrink: 0;
         }
 
         .chat-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .chat-item:hover::before {
-            left: 100%;
+            display: none; /* Removed shimmer effect */
         }
 
         .chat-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateX(8px);
-            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
+            transform: none; /* Removed transform */
+            box-shadow: none; /* Removed shadow */
         }
 
         .chat-item.active {
-            background: rgba(0, 212, 255, 0.12);
-            border-color: rgba(0, 212, 255, 0.3);
-            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.2);
+            background: rgba(255, 69, 0, 0.15);
+            border-color: rgba(255, 69, 0, 0.4);
+            box-shadow: none; /* Removed shadow */
         }
 
         .chat-title {
@@ -115,17 +119,54 @@
 
         .chat-time {
             font-size: 12px;
-            color: #888;
+            color: #ccc;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .new-chat-btn {
-            background: linear-gradient(135deg, #00d4ff, #0099cc);
+        /* Prompt Input and Generate Button in Sidebar */
+        .sidebar-prompt-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto; /* Pushes it to the bottom */
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        .sidebar-prompt-textarea {
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 50px;
+            max-height: 120px;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: none; /* Removed shadow */
+        }
+
+        .sidebar-prompt-textarea::placeholder {
+            color: #aaa;
+        }
+
+        .sidebar-prompt-textarea:focus {
+            border-color: #ff4500;
+            box-shadow: none; /* Removed glow on focus */
+        }
+
+        .sidebar-generate-btn {
+            background: linear-gradient(135deg, #ff4500, #ff8c00);
             border: none;
-            border-radius: 15px;
-            padding: 15px;
+            border-radius: 12px;
+            padding: 12px 20px;
             color: white;
             font-weight: 600;
             cursor: pointer;
@@ -133,33 +174,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            font-size: 14px;
-            position: relative;
-            overflow: hidden;
+            gap: 8px;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            box-shadow: none; /* Removed shadow */
         }
 
-        .new-chat-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transition: all 0.4s ease;
-            transform: translate(-50%, -50%);
-        }
-
-        .new-chat-btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .new-chat-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        .sidebar-generate-btn:hover {
+            transform: none; /* Removed transform */
+            box-shadow: none; /* Removed shadow */
         }
 
         /* Main Content Area */
@@ -167,57 +190,65 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            background: rgba(255, 255, 255, 0.08); /* Frosted glass base */
+            backdrop-filter: blur(30px);
+            border-radius: 15px;
+            box-shadow: none; /* Removed glowing shadow */
+            overflow: hidden;
         }
 
         /* Header */
         .header {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 18px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: none; /* Removed shadow */
+            flex-shrink: 0;
         }
 
         .tabs {
             display: flex;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.08);
             padding: 4px;
-            border-radius: 12px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .tab {
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 8px 16px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 500;
-            font-size: 14px;
+            font-size: 13px;
+            color: #ccc;
         }
 
         .tab.active {
-            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            background: linear-gradient(135deg, #ff4500, #ff8c00);
             color: white;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+            box-shadow: none; /* Removed shadow */
         }
 
         .tab:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
         }
 
         .header-controls {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             align-items: center;
         }
 
         .control-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.15);
             background: rgba(255, 255, 255, 0.05);
             color: white;
@@ -231,24 +262,13 @@
         }
 
         .control-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .control-btn:hover::before {
-            left: 100%;
+            display: none; /* Removed shimmer effect */
         }
 
         .control-btn:hover {
             background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.2);
+            transform: none; /* Removed transform */
+            box-shadow: none; /* Removed shadow */
         }
 
         /* Content Area */
@@ -256,8 +276,12 @@
             flex: 1;
             position: relative;
             display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow:auto;
         }
 
+        /* Generation View */
         .generation-view {
             width: 100%;
             height: 100%;
@@ -265,232 +289,186 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            text-align: center;
+            /* Removed overflow-y: auto from generation-view */
+            border-radius: 15px;
         }
 
         .generation-container {
-            text-align: center;
-            max-width: 600px;
+            max-width: 300px; /* Further reduced max-width */
             width: 100%;
-            padding: 40px;
+            padding: 8px; /* Further reduced padding */
+            margin-bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 0;
+            flex-shrink: 0;
         }
 
         .generation-icon {
-            width: 120px;
-            height: 120px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            border-radius: 25px;
-            margin: 0 auto 40px;
+            width: 50px; /* Reduced size */
+            height: 50px; /* Reduced size */
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 69, 0, 0.4);
+            border-radius: 15px; /* Adjusted border-radius */
+            margin-bottom: 8px; /* Reduced margin */
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: iconPulse 2s ease-in-out infinite;
+            animation: none;
             position: relative;
             overflow: hidden;
         }
 
         .generation-icon::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
-            animation: shimmer 2s linear infinite;
+            display: none;
         }
 
         .generation-icon i {
-            font-size: 50px;
-            background: linear-gradient(45deg, #00d4ff, #00ff80);
+            font-size: 20px; /* Reduced font size */
+            background: linear-gradient(45deg, #ff4500, #ff8c00);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             z-index: 1;
         }
 
-        @keyframes iconPulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
-            }
-        }
-
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
         .generation-title {
-            font-size: 32px;
+            font-size: 16px; /* Reduced font size */
             font-weight: 700;
-            margin-bottom: 15px;
-            background: linear-gradient(45deg, #ffffff, #00d4ff);
+            margin-bottom: 4px; /* Reduced margin */
+            background: linear-gradient(45deg, #ffffff, #ff4500);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .generation-subtitle {
-            font-size: 16px;
+            font-size: 10px; /* Reduced font size */
             color: #aaaaaa;
-            margin-bottom: 50px;
-            line-height: 1.6;
+            margin-bottom: 10px; /* Reduced margin */
+            line-height: 1.5;
         }
 
         .progress-section {
-            margin-bottom: 40px;
+            margin-bottom: 8px; /* Reduced margin */
+            width: 100%;
         }
 
         .progress-item {
             display: flex;
             align-items: center;
-            gap: 18px;
-            padding: 18px 25px;
-            margin-bottom: 15px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            gap: 6px; /* Reduced gap */
+            padding: 6px 8px; /* Reduced padding */
+            margin-bottom: 4px; /* Reduced margin */
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px; /* Reduced border-radius */
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
         }
 
         .progress-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 128, 0.1), transparent);
-            transition: left 0.8s ease;
-        }
-
-        .progress-item.completed::before {
-            left: 100%;
+            display: none;
         }
 
         .progress-item.completed {
-            background: rgba(0, 255, 128, 0.08);
-            border-color: rgba(0, 255, 128, 0.25);
-            box-shadow: 0 5px 20px rgba(0, 255, 128, 0.1);
+            background: rgba(255, 140, 0, 0.08);
+            border-color: rgba(255, 140, 0, 0.25);
+            box-shadow: none;
         }
 
         .progress-item.active {
-            background: rgba(0, 212, 255, 0.08);
-            border-color: rgba(0, 212, 255, 0.25);
-            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.1);
+            background: rgba(255, 69, 0, 0.08);
+            border-color: rgba(255, 69, 0, 0.25);
+            box-shadow: none;
         }
 
         .progress-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
+            width: 24px; /* Reduced size */
+            height: 24px; /* Reduced size */
+            border-radius: 6px; /* Reduced border-radius */
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.08);
-            font-size: 18px;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 10px; /* Reduced font size */
             transition: all 0.4s ease;
         }
 
         .progress-item.completed .progress-icon {
-            background: rgba(0, 255, 128, 0.2);
-            color: #00ff80;
-            animation: completedBounce 0.5s ease;
+            background: rgba(255, 140, 0, 0.2);
+            color: #ff8c00;
+            animation: none;
         }
 
         .progress-item.active .progress-icon {
-            background: rgba(0, 212, 255, 0.2);
-            color: #00d4ff;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes completedBounce {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            background: rgba(255, 69, 0, 0.2);
+            color: #ff4500;
+            animation: none;
         }
 
         .progress-text {
             flex: 1;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 11px; /* Reduced font size */
         }
 
         .progress-status {
-            font-size: 14px;
+            font-size: 9px; /* Reduced font size */
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 3px;
         }
 
         .progress-item.completed .progress-status {
-            color: #00ff80;
+            color: #ff8c00;
         }
 
         .progress-item.active .progress-status {
-            color: #00d4ff;
+            color: #ff4500;
         }
 
         .progress-bar-container {
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px; /* Reduced border-radius */
+            padding: 10px; /* Reduced padding */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: none;
+            width: 100%;
         }
 
         .progress-bar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 8px; /* Reduced margin */
         }
 
         .progress-bar {
             width: 100%;
-            height: 8px;
+            height: 6px; /* Reduced height */
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+            border-radius: 3px; /* Reduced border-radius */
             overflow: hidden;
             position: relative;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #00d4ff, #00ff80);
+            background: linear-gradient(90deg, #ff4500, #ff8c00);
             width: 0%;
-            border-radius: 4px;
+            border-radius: 3px; /* Reduced border-radius */
             transition: width 0.8s ease;
             position: relative;
         }
 
         .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 20px;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
-            animation: progressShine 2s linear infinite;
-        }
-
-        @keyframes progressShine {
-            0% { opacity: 0; }
-            50% { opacity: 1; }
-            100% { opacity: 0; }
+            display: none;
         }
 
         /* Preview Panel */
@@ -499,6 +477,11 @@
             height: 100%;
             display: none;
             flex-direction: column;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: none; /* Removed shadow */
         }
 
         .preview-panel.active {
@@ -508,21 +491,25 @@
         .preview-header {
             display: flex;
             align-items: center;
-            padding: 15px 25px;
-            background: rgba(255, 255, 255, 0.03);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            gap: 15px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 10px;
+            flex-shrink: 0;
         }
 
         .url-bar {
             flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            padding: 6px 12px;
             color: #aaa;
-            font-size: 14px;
+            font-size: 13px;
             font-family: 'Inconsolata', monospace;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .preview-content {
@@ -545,6 +532,11 @@
             height: 100%;
             display: none;
             flex-direction: column;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: none; /* Removed shadow */
         }
 
         .code-panel.active {
@@ -553,26 +545,28 @@
 
         .code-tabs {
             display: flex;
-            background: rgba(255, 255, 255, 0.03);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 0 25px;
+            background: rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0 20px;
+            border-radius: 15px 15px 0 0;
+            flex-shrink: 0;
         }
 
         .code-tab {
-            padding: 15px 20px;
+            padding: 12px 18px;
             cursor: pointer;
             transition: all 0.3s ease;
             border-bottom: 2px solid transparent;
-            font-size: 14px;
+            font-size: 13px;
             color: #aaa;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .code-tab.active {
-            color: #00d4ff;
-            border-bottom-color: #00d4ff;
+            color: #ff4500;
+            border-bottom-color: #ff4500;
         }
 
         .code-tab:hover:not(.active) {
@@ -581,12 +575,13 @@
 
         .code-content {
             flex: 1;
-            overflow: auto;
+            height: 100%; /* Explicit height for flex item */
+            overflow: auto; /* Ensure scrollability for code content */
         }
 
         .code-block {
             display: none;
-            height: 100%;
+            height: 100%; /* Ensure code-block takes full height of its parent */
         }
 
         .code-block.active {
@@ -595,56 +590,19 @@
 
         .code-block pre {
             margin: 0;
-            padding: 25px;
-            height: 100%;
-            overflow: auto;
+            padding: 20px;
+            height: 100%; /* Ensure pre takes full height of its parent */
+            overflow: auto; /* Ensure scrollability for pre tag */
             background: #1a1a1a !important;
             font-family: 'Inconsolata', monospace;
-            font-size: 14px;
+            font-size: 13px;
             line-height: 1.6;
+            border-radius: 0 0 15px 15px;
         }
 
-        /* Floating elements */
+        /* Floating particles - Removed completely */
         .floating-particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .particle {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: rgba(0, 212, 255, 0.4);
-            border-radius: 50%;
-            animation: float 8s ease-in-out infinite;
-        }
-
-        .particle:nth-child(1) { left: 15%; top: 25%; animation-delay: 0s; }
-        .particle:nth-child(2) { left: 85%; top: 35%; animation-delay: 2s; }
-        .particle:nth-child(3) { left: 65%; top: 75%; animation-delay: 4s; }
-        .particle:nth-child(4) { left: 25%; top: 85%; animation-delay: 1s; }
-        .particle:nth-child(5) { left: 45%; top: 15%; animation-delay: 3s; }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px) rotate(0deg);
-                opacity: 0.3;
-            }
-            25% {
-                transform: translateY(-30px) rotate(90deg);
-                opacity: 0.8;
-            }
-            50% {
-                transform: translateY(-15px) rotate(180deg);
-                opacity: 0.5;
-            }
-            75% {
-                transform: translateY(-25px) rotate(270deg);
-                opacity: 0.7;
-            }
+            display: none;
         }
 
         /* Error States */
@@ -652,6 +610,16 @@
             text-align: center;
             padding: 40px;
             color: #ff6b6b;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: none; /* Removed shadow */
         }
 
         .error-icon {
@@ -672,7 +640,7 @@
         }
 
         .retry-btn {
-            background: linear-gradient(135deg, #ff6b6b, #ff5252);
+            background: linear-gradient(135deg, #ff4500, #ff8c00);
             border: none;
             border-radius: 8px;
             padding: 10px 20px;
@@ -682,8 +650,8 @@
         }
 
         .retry-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+            transform: none; /* Removed transform */
+            box-shadow: none; /* Removed shadow */
         }
 
         /* Loading States */
@@ -705,7 +673,7 @@
             width: 50px;
             height: 50px;
             border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top: 3px solid #00d4ff;
+            border-top: 3px solid #ff4500;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -714,29 +682,31 @@
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
+                padding: 10px;
+                gap: 10px;
             }
             
             .sidebar {
                 width: 100%;
                 height: auto;
-                max-height: 200px;
-                overflow-x: auto;
-                overflow-y: visible;
-                display: flex;
-                flex-direction: row;
-                gap: 10px;
+                max-height: 250px;
+                overflow-x: hidden;
+                overflow-y: auto; /* Re-added for mobile in case content exceeds */
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
                 padding: 15px;
             }
             
             .chat-history {
                 display: flex;
-                gap: 10px;
-                margin-bottom: 0;
-                overflow-x: auto;
+                flex-direction: column;
+                gap: 8px;
+                margin-bottom: 15px;
+                max-height: 150px; /* Adjust max-height for mobile chat history */
             }
             
             .chat-item {
-                min-width: 200px;
+                min-width: unset;
                 margin-bottom: 0;
             }
             
@@ -744,12 +714,34 @@
                 display: none;
             }
             
-            .new-chat-btn {
-                min-width: 120px;
+            .sidebar-prompt-container {
+                padding-top: 15px;
+                margin-top: 15px;
+            }
+
+            .sidebar-generate-btn {
+                width: 100%;
+                padding: 12px;
             }
             
+            .main-content {
+                border-radius: 15px;
+            }
+
             .header {
-                padding: 15px 20px;
+                padding: 15px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .tabs {
+                flex-grow: 1;
+                justify-content: center;
+            }
+
+            .header-controls {
+                flex-grow: 1;
+                justify-content: center;
             }
             
             .generation-container {
@@ -770,40 +762,8 @@
                 font-size: 30px;
             }
 
-            .tabs {
-                gap: 4px;
-            }
-
-            .tab {
-                padding: 8px 16px;
-                font-size: 13px;
-            }
-
-            .header-controls {
-                gap: 8px;
-            }
-
-            .control-btn {
-                width: 38px;
-                height: 38px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .sidebar {
-                padding: 10px;
-            }
-            
-            .header {
-                padding: 10px 15px;
-            }
-            
-            .generation-title {
-                font-size: 20px;
-            }
-            
             .progress-item {
-                padding: 15px 20px;
+                padding: 15px;
             }
 
             .progress-icon {
@@ -816,31 +776,76 @@
                 font-size: 14px;
             }
         }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 10px;
+            }
+            
+            .generation-title {
+                font-size: 20px;
+            }
+            
+            .progress-item {
+                padding: 12px;
+            }
+
+            .progress-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+
+            .progress-text {
+                font-size: 13px;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="aurora-bg"></div>
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="logo">MAGNUS</div>
             
             <div class="chat-history">
+                <!-- User Prompt Chat Item -->
+                <div class="chat-item">
+                    <div class="chat-title">
+                        <i class="fas fa-user"></i>
+                        <span id="userPromptTitle">Your Prompt</span>
+                    </div>
+                    <div class="chat-time">
+                        <span id="userPromptTime"><i class="far fa-clock"></i> 12:50 pm</span>
+                        <i class="fas fa-copy" style="cursor: pointer;" title="Copy prompt" onclick="copyPrompt(event)"></i>
+                    </div>
+                </div>
+
+                <!-- Magnus Response Chat Item (for generated code) -->
                 <div class="chat-item active">
                     <div class="chat-title">
                         <i class="fas fa-robot"></i>
-                        <span id="chatTitle">New Project</span>
+                        <span id="magnusResponseTitle">Magnus Response</span>
                     </div>
                     <div class="chat-time">
-                        <span><i class="far fa-clock"></i> <span id="currentTime">12:50 pm</span></span>
-                        <i class="fas fa-copy" style="cursor: pointer;" title="Copy prompt" onclick="copyPrompt()"></i>
+                        <span id="magnusResponseTime"><i class="far fa-clock"></i> 12:51 pm</span>
+                        <i class="fas fa-check" style="color: #ff8c00; display: none;"></i>
                     </div>
                 </div>
             </div>
             
-            <button class="new-chat-btn" onclick="window.location.href='/dashboard'">
-                <i class="fas fa-plus"></i>
-                <span>New Chat</span>
-            </button>
+            <!-- Prompt Input and Generate Button in Sidebar -->
+            <div class="sidebar-prompt-container">
+                <textarea id="promptInput" class="sidebar-prompt-textarea" placeholder="Describe the code you want to generate..."></textarea>
+                <button id="generateBtn" class="sidebar-generate-btn">
+                    <i class="fas fa-rocket"></i> Generate Code
+                </button>
+            </div>
         </div>
 
         <!-- Main Content -->
@@ -883,82 +888,72 @@
                     <div class="loading-spinner"></div>
                 </div>
 
-                <!-- Generation View -->
+                <!-- Initial View / Generation View -->
                 <div class="generation-view" id="generationView">
                     <div class="floating-particles">
-                        <div class="particle"></div>
-                        <div class="particle"></div>
-                        <div class="particle"></div>
-                        <div class="particle"></div>
-                        <div class="particle"></div>
+                        <!-- Particles are now hidden via CSS, but HTML structure remains -->
                     </div>
-                    
                     <div class="generation-container">
                         <div class="generation-icon">
-                            <i class="fas fa-magic" id="generationIcon"></i>
+                            <i class="fas fa-desktop" id="generationIcon"></i>
                         </div>
+                        <h2 class="generation-title" id="generationTitle">Generating your website...</h2>
+                        <p class="generation-subtitle" id="generationSubtitle">Start a conversation to generate and preview your website</p>
                         
-                        <h2 class="generation-title" id="generationTitle">Analyzing your request...</h2>
-                        <p class="generation-subtitle" id="generationSubtitle">Please wait while Magnus generates your code</p>
-                        
-                        <div class="progress-section" id="progressSection">
+                        <!-- Progress section is now hidden by default in this view, only shown during active generation -->
+                        <div class="progress-section" id="progressSection" style="display: none;">
                             <div class="progress-item" id="analyzeStep">
                                 <div class="progress-icon">
                                     <i class="fas fa-search"></i>
                                 </div>
-                                <div class="progress-text">Analyzing requirements</div>
+                                <div class="progress-text">Understanding request</div>
                                 <div class="progress-status">
                                     <i class="fas fa-hourglass-start"></i>
                                     <span>Pending</span>
                                 </div>
                             </div>
-                            
-                            <div class="progress-item" id="htmlStep">
+                            <div class="progress-item" id="planStep">
                                 <div class="progress-icon">
-                                    <i class="fab fa-html5"></i>
+                                    <i class="fas fa-lightbulb"></i>
                                 </div>
-                                <div class="progress-text">Generating HTML structure</div>
+                                <div class="progress-text">Planning solution</div>
                                 <div class="progress-status">
                                     <i class="fas fa-hourglass-start"></i>
                                     <span>Pending</span>
                                 </div>
                             </div>
-                            
-                            <div class="progress-item" id="cssStep">
+                            <div class="progress-item" id="draftStep">
                                 <div class="progress-icon">
-                                    <i class="fab fa-css3-alt"></i>
+                                    <i class="fas fa-pencil-alt"></i>
                                 </div>
-                                <div class="progress-text">Creating CSS styles</div>
+                                <div class="progress-text">Drafting code</div>
                                 <div class="progress-status">
                                     <i class="fas fa-hourglass-start"></i>
                                     <span>Pending</span>
                                 </div>
                             </div>
-                            
-                            <div class="progress-item" id="jsStep">
+                            <div class="progress-item" id="refineStep">
                                 <div class="progress-icon">
-                                    <i class="fab fa-js-square"></i>
+                                    <i class="fas fa-cogs"></i>
                                 </div>
-                                <div class="progress-text">Adding JavaScript functionality</div>
+                                <div class="progress-text">Refining code</div>
                                 <div class="progress-status">
                                     <i class="fas fa-hourglass-start"></i>
                                     <span>Pending</span>
                                 </div>
                             </div>
-                            
                             <div class="progress-item" id="finalizeStep">
                                 <div class="progress-icon">
                                     <i class="fas fa-check-circle"></i>
                                 </div>
-                                <div class="progress-text">Finalizing and optimizing</div>
+                                <div class="progress-text">Finalizing output</div>
                                 <div class="progress-status">
                                     <i class="fas fa-hourglass-start"></i>
                                     <span>Pending</span>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="progress-bar-container">
+                        <div class="progress-bar-container" id="progressBarContainer" style="display: none;">
                             <div class="progress-bar-header">
                                 <span>Overall Progress</span>
                                 <span id="progressPercent">0%</span>
@@ -973,9 +968,7 @@
                 <!-- Preview Panel -->
                 <div class="preview-panel" id="previewPanel">
                     <div class="preview-header">
-                        <div class="url-bar" id="urlBar">
-                            https://preview.magnus.dev/project/12345
-                        </div>
+                        <div class="url-bar" id="urlBar"> https://preview.magnus.dev/project/12345 </div>
                         <button class="control-btn" id="openInNew" title="Open in new tab">
                             <i class="fas fa-external-link-alt"></i>
                         </button>
@@ -988,232 +981,64 @@
                 <!-- Code Panel -->
                 <div class="code-panel" id="codePanel">
                     <div class="code-tabs">
-                        <div class="code-tab active" data-code="html">
-                            <i class="fab fa-html5"></i>
-                            HTML
+                        <div class="code-tab active" data-code="output1">
+                            <i class="fas fa-file-code"></i> Output 1
                         </div>
-                        <div class="code-tab" data-code="css">
-                            <i class="fab fa-css3-alt"></i>
-                            CSS
+                        <div class="code-tab" data-code="output2">
+                            <i class="fas fa-file-code"></i> Output 2
                         </div>
-                        <div class="code-tab" data-code="js">
-                            <i class="fab fa-js-square"></i>
-                            JavaScript
+                        <div class="code-tab" data-code="output3">
+                            <i class="fas fa-file-code"></i> Output 3
                         </div>
                     </div>
                     <div class="code-content">
-                        <div class="code-block active" id="htmlCode">
-                            <pre><code class="language-html">&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-    &lt;title&gt;Generated Project&lt;/title&gt;
-    &lt;link rel="stylesheet" href="style.css"&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class="container"&gt;
-        &lt;h1&gt;Hello, World!&lt;/h1&gt;
-        &lt;p&gt;This is your generated project.&lt;/p&gt;
-        &lt;button id="actionBtn"&gt;Click me!&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;script src="script.js"&gt;&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
+                        <div class="code-block active" id="output1Code">
+                            <pre><code class="language-html">&lt;!-- Generated code will appear here --&gt;</code></pre>
                         </div>
-                        <div class="code-content">
-                            <div class="code-block active" id="htmlCode">
-                              <pre><code class="language-html">
-                          <!DOCTYPE html>
-                          <html lang="en">
-                          <head>
-                            <meta charset="UTF-8" />
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                            <title>Generated Project</title>
-                            <link rel="stylesheet" href="style.css" />
-                          </head>
-                          <body>
-                            <div class="container">
-                              <h1>Hello, World!</h1>
-                              <p>This is your generated project.</p>
-                              <button id="actionBtn">Click me!</button>
-                            </div>
-                            <script src="script.js"></script>
-                          </body>
-                          </html>
-                              </code></pre>
-                            </div>
-                          
-                            <div class="code-block" id="cssCode">
-                              <pre><code class="language-css">
-                          * {
-                            margin: 0;
-                            padding: 0;
-                            box-sizing: border-box;
-                          }
-                          
-                          body {
-                            font-family: 'Poppins', sans-serif;
-                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                            min-height: 100vh;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                          }
-                          
-                          .container {
-                            text-align: center;
-                            padding: 2rem;
-                            background: rgba(255, 255, 255, 0.1);
-                            backdrop-filter: blur(10px);
-                            border-radius: 20px;
-                            border: 1px solid rgba(255, 255, 255, 0.2);
-                            color: white;
-                          }
-                          
-                          h1 {
-                            font-size: 3rem;
-                            margin-bottom: 1rem;
-                            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-                            -webkit-background-clip: text;
-                            -webkit-text-fill-color: transparent;
-                            background-clip: text;
-                          }
-                          
-                          p {
-                            font-size: 1.2rem;
-                            margin-bottom: 2rem;
-                            opacity: 0.9;
-                          }
-                          
-                          button {
-                            padding: 12px 30px;
-                            border: none;
-                            border-radius: 50px;
-                            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-                            color: white;
-                            font-size: 1rem;
-                            font-weight: 600;
-                            cursor: pointer;
-                            transition: all 0.3s ease;
-                            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-                          }
-                          
-                          button:hover {
-                            transform: translateY(-3px);
-                            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-                          }
-                              </code></pre>
-                            </div>
-                          
-                            <div class="code-block" id="jsCode">
-                              <pre><code class="language-javascript">
-                          document.addEventListener('DOMContentLoaded', function () {
-                            const button = document.getElementById('actionBtn');
-                          
-                            button.addEventListener('click', function () {
-                              button.style.transform = 'scale(0.95)';
-                              setTimeout(() => {
-                                button.style.transform = 'scale(1)';
-                              }, 100);
-                          
-                              alert('Hello from Magnus! Your project is ready to customize.');
-                            });
-                          
-                            createParticles();
-                          });
-                          
-                          function createParticles() {
-                            const container = document.querySelector('.container');
-                          
-                            for (let i = 0; i < 20; i++) {
-                              const particle = document.createElement('div');
-                              particle.style.cssText = `
-                                position: absolute;
-                                width: 4px;
-                                height: 4px;
-                                background: rgba(255, 255, 255, 0.6);
-                                border-radius: 50%;
-                                pointer-events: none;
-                                animation: float ${Math.random() * 3 + 2}s ease-in-out infinite;
-                                left: ${Math.random() * 100}%;
-                                top: ${Math.random() * 100}%;
-                                animation-delay: ${Math.random() * 2}s;
-                              `;
-                              container.appendChild(particle);
-                            }
-                          }
-                          
-                          const style = document.createElement('style');
-                          style.textContent = `
-                          @keyframes float {
-                            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
-                            25% { transform: translateY(-20px) rotate(90deg); opacity: 0.8; }
-                            50% { transform: translateY(-10px) rotate(180deg); opacity: 0.5; }
-                            75% { transform: translateY(-15px) rotate(270deg); opacity: 0.7; }
-                          }
-                          `;
-                          document.head.appendChild(style);
-                              </code></pre>
-                            </div>
-                          </div>
-                          
+                        <div class="code-block" id="output2Code">
+                            <pre><code class="language-css">/* Generated code will appear here */</code></pre>
+                        </div>
+                        <div class="code-block" id="output3Code">
+                            <pre><code class="language-javascript">/* Generated code will appear here */</code></pre>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Error State -->
-                <div class="error-container" id="errorContainer" style="display: none;">
+                <div class="error-container" id="errorContainer">
                     <div class="error-icon">
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
                     <h3 class="error-title">Generation Failed</h3>
-                    <p class="error-message">Something went wrong while generating your code. Please try again.</p>
+                    <p class="error-message" id="errorMessage">Something went wrong while generating your code. Please try again.</p>
                     <button class="retry-btn" onclick="retryGeneration()">
-                        <i class="fas fa-redo"></i>
-                        Retry Generation
+                        <i class="fas fa-redo"></i> Retry Generation
                     </button>
                 </div>
             </div>
         </div>
     </div>
-
     <script>
-        // Current time update
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('en-US', { 
-                hour: 'numeric', 
-                minute: '2-digit',
-                hour12: true 
-            });
-            document.getElementById('currentTime').textContent = timeString;
-        }
-        
-        // Update time immediately and then every minute
-        updateTime();
-        setInterval(updateTime, 60000);
-
         // Tab switching functionality
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', function() {
-                // Remove active class from all tabs
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                // Add active class to clicked tab
                 this.classList.add('active');
                 
-                // Hide all panels
                 document.getElementById('previewPanel').classList.remove('active');
                 document.getElementById('codePanel').classList.remove('active');
-                document.getElementById('generationView').style.display = 'flex';
-                
-                // Show selected panel
+                document.getElementById('generationView').style.display = 'none';
+                document.getElementById('errorContainer').style.display = 'none';
+
                 const tabType = this.getAttribute('data-tab');
                 if (tabType === 'preview') {
-                    document.getElementById('generationView').style.display = 'none';
                     document.getElementById('previewPanel').classList.add('active');
                     loadPreview();
                 } else if (tabType === 'code') {
-                    document.getElementById('generationView').style.display = 'none';
                     document.getElementById('codePanel').classList.add('active');
+                    if (typeof Prism !== 'undefined') {
+                        Prism.highlightAll();
+                    }
                 }
             });
         });
@@ -1221,87 +1046,256 @@
         // Code tab switching
         document.querySelectorAll('.code-tab').forEach(tab => {
             tab.addEventListener('click', function() {
-                // Remove active class from all code tabs
                 document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
-                // Add active class to clicked tab
                 this.classList.add('active');
                 
-                // Hide all code blocks
                 document.querySelectorAll('.code-block').forEach(block => block.classList.remove('active'));
                 
-                // Show selected code block
                 const codeType = this.getAttribute('data-code');
                 document.getElementById(codeType + 'Code').classList.add('active');
+                if (typeof Prism !== 'undefined') {
+                    Prism.highlightAll();
+                }
             });
         });
 
-        // Generation simulation
-        function simulateGeneration() {
-            const steps = [
-                { id: 'analyzeStep', delay: 1000 },
-                { id: 'htmlStep', delay: 2000 },
-                { id: 'cssStep', delay: 3000 },
-                { id: 'jsStep', delay: 4000 },
-                { id: 'finalizeStep', delay: 5000 }
-            ];
-            
-            let currentProgress = 0;
-            const totalSteps = steps.length;
-            
-            steps.forEach((step, index) => {
-                setTimeout(() => {
-                    // Mark current step as active
-                    if (index > 0) {
-                        // Mark previous step as completed
-                        const prevStep = document.getElementById(steps[index - 1].id);
-                        prevStep.classList.remove('active');
-                        prevStep.classList.add('completed');
-                        prevStep.querySelector('.progress-status').innerHTML = '<i class="fas fa-check"></i><span>Complete</span>';
-                    }
-                    
-                    // Mark current step as active
-                    const currentStep = document.getElementById(step.id);
-                    currentStep.classList.add('active');
-                    currentStep.querySelector('.progress-status').innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Processing...</span>';
-                    
-                    // Update progress bar
-                    currentProgress = ((index + 1) / totalSteps) * 100;
-                    document.getElementById('progressFill').style.width = currentProgress + '%';
-                    document.getElementById('progressPercent').textContent = Math.round(currentProgress) + '%';
-                    
-                    // Complete final step
-                    if (index === totalSteps - 1) {
-                        setTimeout(() => {
-                            currentStep.classList.remove('active');
-                            currentStep.classList.add('completed');
-                            currentStep.querySelector('.progress-status').innerHTML = '<i class="fas fa-check"></i><span>Complete</span>';
-                            
-                            // Update generation title and subtitle
-                            document.getElementById('generationTitle').textContent = 'Generation Complete!';
-                            document.getElementById('generationSubtitle').textContent = 'Your project has been successfully generated. Click on Preview or Code to explore.';
-                            document.getElementById('generationIcon').className = 'fas fa-check-circle';
-                        }, 500);
-                    }
-                }, step.delay);
+        // Function to update the progress steps and overall progress bar
+        function updateProgress(stepId, statusText, iconClass, isActive, isCompleted) {
+            const stepElement = document.getElementById(stepId);
+            if (!stepElement) return;
+
+            stepElement.classList.remove('active', 'completed');
+            if (isActive) {
+                stepElement.classList.add('active');
+            }
+            if (isCompleted) {
+                stepElement.classList.add('completed');
+            }
+
+            const statusSpan = stepElement.querySelector('.progress-status span');
+            const statusIcon = stepElement.querySelector('.progress-status i');
+
+            if (statusSpan) statusSpan.textContent = statusText;
+            if (statusIcon) statusIcon.className = iconClass;
+        }
+
+        // Main function to handle code generation
+        async function generateCode() {
+            const prompt = document.getElementById('promptInput').value.trim();
+            if (!prompt) {
+                alert('Please enter a prompt to generate code.');
+                return;
+            }
+
+            // Show generation view and hide others
+            document.getElementById('generationView').style.display = 'flex';
+            document.getElementById('previewPanel').classList.remove('active');
+            document.getElementById('codePanel').classList.remove('active');
+            document.getElementById('errorContainer').style.display = 'none';
+
+            // Reset progress and titles for new generation
+            document.getElementById('generationTitle').textContent = 'Analyzing your request...';
+            document.getElementById('generationSubtitle').textContent = 'Please wait while Magnus generates your code';
+            document.getElementById('generationIcon').className = 'fas fa-magic';
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('progressPercent').textContent = '0%';
+
+            // Show progress section
+            document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('progressBarContainer').style.display = 'block';
+
+            // Reset all progress items to pending
+            document.querySelectorAll('.progress-item').forEach(item => {
+                item.classList.remove('active', 'completed');
+                item.querySelector('.progress-status').innerHTML = '<i class="fas fa-hourglass-start"></i><span>Pending</span>';
             });
+
+            // Update user prompt in sidebar
+            const userPromptTitle = document.getElementById('userPromptTitle');
+            if (userPromptTitle) userPromptTitle.textContent = prompt;
+            const userPromptTime = document.getElementById('userPromptTime');
+            if (userPromptTime) userPromptTime.innerHTML = `<i class="far fa-clock"></i> ${new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}`;
+
+            // Hide Magnus response checkmark initially for new generation
+            const magnusCheckmark = document.querySelector('.chat-item.active .fa-check');
+            if (magnusCheckmark) magnusCheckmark.style.display = 'none';
+
+            // Define steps with new generic names
+            const steps = [
+                { id: 'analyzeStep', text: 'Understanding request', icon: 'fas fa-search', delay: 1000 },
+                { id: 'planStep', text: 'Planning solution', icon: 'fas fa-lightbulb', delay: 2000 },
+                { id: 'draftStep', text: 'Drafting code', icon: 'fas fa-pencil-alt', delay: 3000 },
+                { id: 'refineStep', text: 'Refining code', icon: 'fas fa-cogs', delay: 4000 }
+            ];
+
+            let currentProgress = 0;
+            const totalVisualSteps = steps.length;
+
+            for (let i = 0; i < totalVisualSteps; i++) {
+                const step = steps[i];
+                if (i > 0) {
+                    updateProgress(steps[i - 1].id, 'Complete', 'fas fa-check', false, true);
+                }
+                updateProgress(step.id, 'Processing...', 'fas fa-spinner fa-spin', true, false);
+                // Progress bar calculation now considers the final API call as an additional step
+                currentProgress = ((i + 1) / (totalVisualSteps + 1)) * 100;
+                document.getElementById('progressFill').style.width = currentProgress + '%';
+                document.getElementById('progressPercent').textContent = Math.round(currentProgress) + '%';
+                await new Promise(resolve => setTimeout(resolve, step.delay / 2));
+            }
+
+            // After all visual steps are processed, indicate fetching from API
+            updateProgress('finalizeStep', 'Processing...', 'fas fa-spinner fa-spin', true, false); // Activate finalize step
+            document.getElementById('generationTitle').textContent = 'Finalizing...';
+            document.getElementById('generationSubtitle').textContent = 'Fetching and compiling output...';
+            document.getElementById('generationIcon').className = 'fas fa-download';
+            currentProgress = (totalVisualSteps / (totalVisualSteps + 1)) * 100; // Update progress bar to reflect API call pending
+            document.getElementById('progressFill').style.width = currentProgress + '%';
+            document.getElementById('progressPercent').textContent = Math.round(currentProgress) + '%';
+
+
+            // --- API Call Integration ---
+            try {
+                const apiKey = "AIzaSyDSGy7RDlFf_YzKXF4DtKrroCUmofQg1yg"; // If you want to use models other than gemini-2.0-flash or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: `Generate a complete, single-file HTML, CSS, and JavaScript code for the following prompt. Provide the output as a JSON object with three fields: 'html', 'css', and 'js'. Ensure the HTML includes a <style> tag for CSS and a <script> tag for JavaScript. The HTML should be a full, valid HTML document. The CSS should be complete and functional. The JavaScript should be functional and interactive. Prompt: ${prompt}` }] });
+
+                const payload = {
+                    contents: chatHistory,
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "OBJECT",
+                            properties: {
+                                "html": { "type": "STRING" },
+                                "css": { "type": "STRING" },
+                                "js": { "type": "STRING" }
+                            },
+                            "propertyOrdering": ["html", "css", "js"]
+                        }
+                    }
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.text();
+                    throw new Error(`API error: ${response.status} ${response.statusText} - ${errorBody}`);
+                }
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const jsonString = result.candidates[0].content.parts[0].text;
+                    const parsedCode = JSON.parse(jsonString);
+
+                    // Update code blocks (using generic IDs)
+                    document.querySelector('#output1Code code').textContent = parsedCode.html;
+                    document.querySelector('#output2Code code').textContent = parsedCode.css;
+                    document.querySelector('#output3Code code').textContent = parsedCode.js;
+
+                    // Mark FINAL step (finalizeStep) as truly completed after successful API call
+                    updateProgress('finalizeStep', 'Complete', 'fas fa-check', false, true);
+                    document.getElementById('generationTitle').textContent = 'Code Generated!';
+                    document.getElementById('generationSubtitle').textContent = 'Your project is ready!';
+                    document.getElementById('generationIcon').className = 'fas fa-check-circle';
+                    document.getElementById('progressFill').style.width = '100%'; // Ensure 100% on success
+                    document.getElementById('progressPercent').textContent = '100%';
+
+                    // Update chat history with generated code details
+                    document.getElementById('magnusResponseTitle').textContent = 'Code Generated!';
+                    document.getElementById('magnusResponseTime').innerHTML = `<i class="far fa-clock"></i> ${new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}`;
+                    if (magnusCheckmark) magnusCheckmark.style.display = 'inline'; // Show checkmark
+
+                    // Switch to preview tab and load the new code
+                    document.querySelector('.tab[data-tab="preview"]').click();
+                    document.getElementById('generationView').style.display = 'none';
+                    document.getElementById('previewPanel').classList.add('active');
+
+                    // Highlight code in code panel
+                    if (typeof Prism !== 'undefined') {
+                        Prism.highlightAll();
+                    }
+
+                } else {
+                    throw new Error("Invalid API response structure or no content generated.");
+                }
+
+            } catch (error) {
+                console.error('Error fetching code from API:', error);
+                document.getElementById('generationView').style.display = 'none';
+                document.getElementById('errorContainer').style.display = 'flex';
+                document.getElementById('errorMessage').textContent = `Error: ${error.message || 'Could not generate code.'}`;
+                // Ensure finalizeStep is marked as failed or reset on error
+                updateProgress('finalizeStep', 'Failed', 'fas fa-times', false, false);
+                document.getElementById('generationTitle').textContent = 'Generation Failed!';
+                document.getElementById('generationSubtitle').textContent = 'Please try again.';
+                document.getElementById('generationIcon').className = 'fas fa-exclamation-triangle';
+                document.getElementById('progressFill').style.width = '0%'; // Reset progress bar on error
+                document.getElementById('progressPercent').textContent = '0%';
+            } finally {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                // Hide progress section and progress bar container after generation (success or fail)
+                document.getElementById('progressSection').style.display = 'none';
+                document.getElementById('progressBarContainer').style.display = 'none';
+            }
         }
 
         // Load preview content
         function loadPreview() {
             const iframe = document.getElementById('previewIframe');
-            const htmlCode = document.querySelector('#htmlCode code').textContent;
-            const cssCode = document.querySelector('#cssCode code').textContent;
-            const jsCode = document.querySelector('#jsCode code').textContent;
+            if (!iframe) return;
+
+            // Use generic output IDs for code
+            const htmlCode = document.querySelector('#output1Code code').textContent;
+            const cssCode = document.querySelector('#output2Code code').textContent;
+            const jsCode = document.querySelector('#output3Code code').textContent;
             
-            const fullHTML = htmlCode.replace(
-                '<link rel="stylesheet" href="style.css">',
-                `<style>${cssCode}</style>`
-            ).replace(
-                '<script src="script.js"></script>',
-                `<script>${jsCode}</script>`
-            );
+            // Construct the full HTML for the iframe, embedding CSS and JS directly
+            const fullHTML = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Preview</title>
+                    <style>${cssCode}</style>
+                </head>
+                <body>
+                    ${htmlCode}
+                    <script>${jsCode}<\/script>
+                </body>
+                </html>
+            `;
             
             iframe.srcdoc = fullHTML;
+
+            // Re-attach event listener for the action button inside the iframe
+            iframe.onload = () => {
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    const actionBtn = iframeDoc.getElementById('actionBtn');
+                    if (actionBtn) {
+                        actionBtn.onclick = function() {
+                            this.style.transform = 'scale(0.95)';
+                            setTimeout(() => {
+                                this.style.transform = 'scale(1)';
+                            }, 100);
+                            iframe.contentWindow.alert('Hello from Magnus! Your project is ready to customize.');
+                        };
+                    }
+                } catch (e) {
+                    console.warn("Could not access iframe content (likely due to cross-origin restrictions or content not fully loaded yet).", e);
+                }
+            };
         }
 
         // Control buttons functionality
@@ -1330,74 +1324,99 @@
         });
 
         document.getElementById('downloadBtn').addEventListener('click', function() {
-            // Create zip file simulation
             alert('Download feature will be available soon! For now, you can copy the code from the Code tab.');
         });
 
         document.getElementById('shareBtn').addEventListener('click', function() {
-            // Copy share link to clipboard
-            navigator.clipboard.writeText('https://preview.magnus.dev/project/12345').then(() => {
-                // Show temporary success message
-                const originalText = this.innerHTML;
-                this.innerHTML = '<i class="fas fa-check"></i>';
-                this.style.background = 'rgba(0, 255, 128, 0.2)';
-                setTimeout(() => {
-                    this.innerHTML = originalText;
-                    this.style.background = '';
-                }, 2000);
-            });
+            document.execCommand('copy');
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-check"></i>';
+            this.style.background = 'rgba(255, 140, 0, 0.2)';
+            setTimeout(() => {
+                this.innerHTML = originalText;
+                this.style.background = '';
+            }, 2000);
         });
 
         document.getElementById('openInNew').addEventListener('click', function() {
-            window.open('https://preview.magnus.dev/project/12345', '_blank');
+            alert('Opening in new tab is not directly supported for dynamic iframe content due to security. Please copy the code from the "Code" tab.');
         });
 
         // Copy prompt functionality
-        function copyPrompt() {
-            const promptText = "Create a beautiful landing page with gradient background and interactive elements";
-            navigator.clipboard.writeText(promptText).then(() => {
-                // Show temporary success message
-                const icon = event.target;
-                const originalClass = icon.className;
-                icon.className = 'fas fa-check';
-                icon.style.color = '#00ff80';
-                setTimeout(() => {
-                    icon.className = originalClass;
-                    icon.style.color = '';
-                }, 2000);
-            });
+        function copyPrompt(event) {
+            const promptTextElement = event.target.closest('.chat-item').querySelector('.chat-title span');
+            const promptText = promptTextElement ? promptTextElement.textContent : "No prompt found.";
+            
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = promptText;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const icon = event.target;
+            const originalClass = icon.className;
+            icon.className = 'fas fa-check';
+            icon.style.color = '#ff8c00';
+            setTimeout(() => {
+                icon.className = originalClass;
+                icon.style.color = '';
+            }, 2000);
+            event.stopPropagation();
         }
 
         // Retry generation
         function retryGeneration() {
             document.getElementById('errorContainer').style.display = 'none';
             document.getElementById('generationView').style.display = 'flex';
-            
-            // Reset all progress items
-            document.querySelectorAll('.progress-item').forEach(item => {
-                item.classList.remove('active', 'completed');
-                item.querySelector('.progress-status').innerHTML = '<i class="fas fa-hourglass-start"></i><span>Pending</span>';
-            });
-            
-            // Reset progress bar
-            document.getElementById('progressFill').style.width = '0%';
-            document.getElementById('progressPercent').textContent = '0%';
-            
-            // Reset titles
-            document.getElementById('generationTitle').textContent = 'Analyzing your request...';
-            document.getElementById('generationSubtitle').textContent = 'Please wait while Magnus generates your code';
-            document.getElementById('generationIcon').className = 'fas fa-magic';
-            
-            // Start simulation again
-            simulateGeneration();
+            generateCode();
         }
 
-        // Start generation simulation on page load
-        setTimeout(() => {
-            simulateGeneration();
-        }, 1000);
+        // Add event listener for the new generate button in sidebar
+        document.getElementById('generateBtn').addEventListener('click', generateCode);
 
-        // Add some interactive hover effects
+        // Start generation simulation on page load
+        window.onload = () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialPrompt = urlParams.get('prompt');
+            const promptInput = document.getElementById('promptInput');
+            const userPromptTitle = document.getElementById('userPromptTitle');
+            const userPromptTime = document.getElementById('userPromptTime');
+            const magnusResponseTime = document.getElementById('magnusResponseTime');
+            const magnusResponseTitle = document.getElementById('magnusResponseTitle');
+
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            
+            if (userPromptTime) userPromptTime.innerHTML = `<i class="far fa-clock"></i> ${timeString}`;
+            if (magnusResponseTime) magnusResponseTime.innerHTML = `<i class="far fa-clock"></i> ${timeString}`;
+
+            const magnusCheckmark = document.querySelector('.chat-item.active .fa-check');
+            if (magnusCheckmark) magnusCheckmark.style.display = 'none';
+
+            if (initialPrompt) {
+                const decodedPrompt = decodeURIComponent(initialPrompt);
+                if (promptInput) promptInput.value = decodedPrompt;
+                if (userPromptTitle) userPromptTitle.textContent = decodedPrompt;
+                generateCode(); // Automatically trigger generation
+            } else {
+                // Initial state when no prompt is provided in URL
+                document.getElementById('generationView').style.display = 'flex';
+                document.getElementById('previewPanel').classList.remove('active');
+                document.getElementById('codePanel').classList.remove('active');
+                document.getElementById('errorContainer').style.display = 'none';
+                document.getElementById('progressSection').style.display = 'none';
+                document.getElementById('progressBarContainer').style.display = 'none';
+
+                // Set initial text for generation view when no prompt is given
+                document.getElementById('generationTitle').textContent = 'Generating your website...';
+                document.getElementById('generationSubtitle').textContent = 'Start a conversation to generate and preview your website';
+                document.getElementById('generationIcon').className = 'fas fa-desktop';
+            }
+            
+            // createParticles(); // Particles are now hidden via CSS, no need to create them dynamically
+        };
+
         document.querySelectorAll('.control-btn').forEach(btn => {
             btn.addEventListener('mouseenter', function() {
                 this.style.transform = 'translateY(-2px) scale(1.05)';
@@ -1408,12 +1427,17 @@
             });
         });
 
-        // Prism.js highlight on load
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof Prism !== 'undefined') {
-                Prism.highlightAll();
+        // Function to create floating particles (kept for completeness, though display:none in CSS)
+        function createParticles() {
+            const container = document.querySelector('.floating-particles');
+            if (container) {
+                for (let i = 0; i < 5; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    container.appendChild(particle);
+                }
             }
-        });
+        }
     </script>
 </body>
 </html>

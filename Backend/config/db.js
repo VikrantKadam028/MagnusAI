@@ -2,7 +2,7 @@
 import mongoose from "mongoose";
 
 export const db = mongoose.connect(
-  process.env.MONGODB_URL,
+  "mongodb+srv://vikrantkk2889:clZRES2qrls0b4n9@cluster0.yqonlou.mongodb.net/",
   { dbname: "MagnusAI" }
 )
   .then(() => {

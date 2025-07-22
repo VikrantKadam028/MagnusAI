@@ -578,9 +578,9 @@
       <div class="nav-container">
         <!-- Left Links -->
         <nav class="nav-left">
-          <a href="#">Products ▾</a>
-          <a href="#">Pricing</a>
-          <a href="#">Community</a>
+          <a href="#" class="linksFeature">Products ▾</a>
+          <a href="#" class="linksFeature">Pricing</a>
+          <a href="#" class="linksFeature">Community</a>
         </nav>
 
         <!-- Center Brand -->
@@ -789,7 +789,8 @@
       const popupContainer = document.querySelector("#profilePopupContainer");
       let isPopupVisible = false;
       const plusBtn = document.getElementById("plusBtn");
-      
+      const linksFeature = document.querySelector(".linksFeature");
+
 
 
       function showInfoToast(message, position = "top-left", duration = 4000) {
@@ -815,6 +816,10 @@
       plusBtn.addEventListener("click", () => {
         showInfoToast("Feature coming soon!", "top-left");
       });
+
+      linksFeature.addEventListener("click",()=>{
+        showInfoToast("Feature coming soon!", "top-left");
+      })
       profile.addEventListener("click", () => {
         if (isPopupVisible) {
           popupContainer.innerHTML = "";
@@ -840,7 +845,7 @@
       ">
         <h4 style="margin: 0 0 6px; font-size: 17px; font-weight: 600; color: #00ffffcc;">Magnus Welcomes You</h4>
         <p style="margin: 0 0 14px; font-size: 15px;">👋 Hello, <%= fullName %></p>
-        <form action="/logout" method="POST" style="margin: 0;">
+        <form action="/logout" method="get" style="margin: 0;">
           <button type="submit" style="
             width: 100%;
             padding: 10px;
