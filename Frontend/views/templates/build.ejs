@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnus | Build</title>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Inconsolata:wght@200..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Left Sidebar */
+        .sidebar {
+            width: 340px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
+        }
+
+        .logo {
+            font-family: 'Audiowide', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(45deg, #00d4ff, #0099cc, #00ff80);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 5px rgba(0, 212, 255, 0.3)); }
+            50% { filter: brightness(1.2) drop-shadow(0 0 15px rgba(0, 212, 255, 0.6)); }
+        }
+
+        .chat-history {
+            flex: 1;
+            margin-bottom: 20px;
+        }
+
+        .chat-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .chat-item:hover::before {
+            left: 100%;
+        }
+
+        .chat-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.15);
+        }
+
+        .chat-item.active {
+            background: rgba(0, 212, 255, 0.12);
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .chat-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-time {
+            font-size: 12px;
+            color: #888;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .new-chat-btn {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border: none;
+            border-radius: 15px;
+            padding: 15px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .new-chat-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .new-chat-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .new-chat-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px;
+            border-radius: 12px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .control-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .control-btn:hover::before {
+            left: 100%;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.2);
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            position: relative;
+            display: flex;
+        }
+
+        .generation-view {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .generation-container {
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .generation-icon {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 25px;
+            margin: 0 auto 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: iconPulse 2s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generation-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+            animation: shimmer 2s linear infinite;
+        }
+
+        .generation-icon i {
+            font-size: 50px;
+            background: linear-gradient(45deg, #00d4ff, #00ff80);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            z-index: 1;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .generation-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ffffff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .generation-subtitle {
+            font-size: 16px;
+            color: #aaaaaa;
+            margin-bottom: 50px;
+            line-height: 1.6;
+        }
+
+        .progress-section {
+            margin-bottom: 40px;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 18px 25px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 128, 0.1), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .progress-item.completed::before {
+            left: 100%;
+        }
+
+        .progress-item.completed {
+            background: rgba(0, 255, 128, 0.08);
+            border-color: rgba(0, 255, 128, 0.25);
+            box-shadow: 0 5px 20px rgba(0, 255, 128, 0.1);
+        }
+
+        .progress-item.active {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: rgba(0, 212, 255, 0.25);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.1);
+        }
+
+        .progress-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.08);
+            font-size: 18px;
+            transition: all 0.4s ease;
+        }
+
+        .progress-item.completed .progress-icon {
+            background: rgba(0, 255, 128, 0.2);
+            color: #00ff80;
+            animation: completedBounce 0.5s ease;
+        }
+
+        .progress-item.active .progress-icon {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes completedBounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-text {
+            flex: 1;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .progress-status {
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-item.completed .progress-status {
+            color: #00ff80;
+        }
+
+        .progress-item.active .progress-status {
+            color: #00d4ff;
+        }
+
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .progress-bar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #00ff80);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.8s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
+            animation: progressShine 2s linear infinite;
+        }
+
+        @keyframes progressShine {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Preview Panel */
+        .preview-panel {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+        }
+
+        .preview-panel.active {
+            display: flex;
+        }
+
+        .preview-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            gap: 15px;
+        }
+
+        .url-bar {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 8px 15px;
+            color: #aaa;
+            font-size: 14px;
+            font-family: 'Inconsolata', monospace;
+        }
+
+        .preview-content {
+            flex: 1;
+            background: white;
+            border-radius: 0 0 15px 15px;
+            overflow: hidden;
+        }
+
+        .preview-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+
+        /* Code Panel */
+        .code-panel {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+        }
+
+        .code-panel.active {
+            display: flex;
+        }
+
+        .code-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0 25px;
+        }
+
+        .code-tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            font-size: 14px;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .code-tab.active {
+            color: #00d4ff;
+            border-bottom-color: #00d4ff;
+        }
+
+        .code-tab:hover:not(.active) {
+            color: #fff;
+        }
+
+        .code-content {
+            flex: 1;
+            overflow: auto;
+        }
+
+        .code-block {
+            display: none;
+            height: 100%;
+        }
+
+        .code-block.active {
+            display: block;
+        }
+
+        .code-block pre {
+            margin: 0;
+            padding: 25px;
+            height: 100%;
+            overflow: auto;
+            background: #1a1a1a !important;
+            font-family: 'Inconsolata', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Floating elements */
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: rgba(0, 212, 255, 0.4);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { left: 15%; top: 25%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 85%; top: 35%; animation-delay: 2s; }
+        .particle:nth-child(3) { left: 65%; top: 75%; animation-delay: 4s; }
+        .particle:nth-child(4) { left: 25%; top: 85%; animation-delay: 1s; }
+        .particle:nth-child(5) { left: 45%; top: 15%; animation-delay: 3s; }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.3;
+            }
+            25% {
+                transform: translateY(-30px) rotate(90deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-15px) rotate(180deg);
+                opacity: 0.5;
+            }
+            75% {
+                transform: translateY(-25px) rotate(270deg);
+                opacity: 0.7;
+            }
+        }
+
+        /* Error States */
+        .error-container {
+            text-align: center;
+            padding: 40px;
+            color: #ff6b6b;
+        }
+
+        .error-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        .error-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .error-message {
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+
+        .retry-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff5252);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Loading States */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 200px;
+                overflow-x: auto;
+                overflow-y: visible;
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+                padding: 15px;
+            }
+            
+            .chat-history {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 0;
+                overflow-x: auto;
+            }
+            
+            .chat-item {
+                min-width: 200px;
+                margin-bottom: 0;
+            }
+            
+            .logo {
+                display: none;
+            }
+            
+            .new-chat-btn {
+                min-width: 120px;
+            }
+            
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .generation-container {
+                padding: 20px;
+            }
+            
+            .generation-title {
+                font-size: 24px;
+            }
+            
+            .generation-icon {
+                width: 80px;
+                height: 80px;
+                margin-bottom: 20px;
+            }
+            
+            .generation-icon i {
+                font-size: 30px;
+            }
+
+            .tabs {
+                gap: 4px;
+            }
+
+            .tab {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+
+            .header-controls {
+                gap: 8px;
+            }
+
+            .control-btn {
+                width: 38px;
+                height: 38px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 10px 15px;
+            }
+            
+            .generation-title {
+                font-size: 20px;
+            }
+            
+            .progress-item {
+                padding: 15px 20px;
+            }
+
+            .progress-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+
+            .progress-text {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">MAGNUS</div>
+            
+            <div class="chat-history">
+                <div class="chat-item active">
+                    <div class="chat-title">
+                        <i class="fas fa-robot"></i>
+                        <span id="chatTitle">New Project</span>
+                    </div>
+                    <div class="chat-time">
+                        <span><i class="far fa-clock"></i> <span id="currentTime">12:50 pm</span></span>
+                        <i class="fas fa-copy" style="cursor: pointer;" title="Copy prompt" onclick="copyPrompt()"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="new-chat-btn" onclick="window.location.href='/dashboard'">
+                <i class="fas fa-plus"></i>
+                <span>New Chat</span>
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="tabs">
+                    <div class="tab active" data-tab="preview">
+                        <i class="fas fa-eye"></i>
+                        Preview
+                    </div>
+                    <div class="tab" data-tab="code">
+                        <i class="fas fa-code"></i>
+                        Code
+                    </div>
+                </div>
+                
+                <div class="header-controls">
+                    <button class="control-btn" id="mobileView" title="Mobile View">
+                        <i class="fas fa-mobile-alt"></i>
+                    </button>
+                    <button class="control-btn" id="desktopView" title="Desktop View">
+                        <i class="fas fa-desktop"></i>
+                    </button>
+                    <button class="control-btn" id="refreshBtn" title="Refresh">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <button class="control-btn" id="downloadBtn" title="Download Code">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="control-btn" id="shareBtn" title="Share">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="loading-overlay" id="loadingOverlay">
+                    <div class="loading-spinner"></div>
+                </div>
+
+                <!-- Generation View -->
+                <div class="generation-view" id="generationView">
+                    <div class="floating-particles">
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                    </div>
+                    
+                    <div class="generation-container">
+                        <div class="generation-icon">
+                            <i class="fas fa-magic" id="generationIcon"></i>
+                        </div>
+                        
+                        <h2 class="generation-title" id="generationTitle">Analyzing your request...</h2>
+                        <p class="generation-subtitle" id="generationSubtitle">Please wait while Magnus generates your code</p>
+                        
+                        <div class="progress-section" id="progressSection">
+                            <div class="progress-item" id="analyzeStep">
+                                <div class="progress-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="progress-text">Analyzing requirements</div>
+                                <div class="progress-status">
+                                    <i class="fas fa-hourglass-start"></i>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-item" id="htmlStep">
+                                <div class="progress-icon">
+                                    <i class="fab fa-html5"></i>
+                                </div>
+                                <div class="progress-text">Generating HTML structure</div>
+                                <div class="progress-status">
+                                    <i class="fas fa-hourglass-start"></i>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-item" id="cssStep">
+                                <div class="progress-icon">
+                                    <i class="fab fa-css3-alt"></i>
+                                </div>
+                                <div class="progress-text">Creating CSS styles</div>
+                                <div class="progress-status">
+                                    <i class="fas fa-hourglass-start"></i>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-item" id="jsStep">
+                                <div class="progress-icon">
+                                    <i class="fab fa-js-square"></i>
+                                </div>
+                                <div class="progress-text">Adding JavaScript functionality</div>
+                                <div class="progress-status">
+                                    <i class="fas fa-hourglass-start"></i>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-item" id="finalizeStep">
+                                <div class="progress-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="progress-text">Finalizing and optimizing</div>
+                                <div class="progress-status">
+                                    <i class="fas fa-hourglass-start"></i>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-header">
+                                <span>Overall Progress</span>
+                                <span id="progressPercent">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Panel -->
+                <div class="preview-panel" id="previewPanel">
+                    <div class="preview-header">
+                        <div class="url-bar" id="urlBar">
+                            https://preview.magnus.dev/project/12345
+                        </div>
+                        <button class="control-btn" id="openInNew" title="Open in new tab">
+                            <i class="fas fa-external-link-alt"></i>
+                        </button>
+                    </div>
+                    <div class="preview-content">
+                        <iframe class="preview-iframe" id="previewIframe" src="about:blank"></iframe>
+                    </div>
+                </div>
+
+                <!-- Code Panel -->
+                <div class="code-panel" id="codePanel">
+                    <div class="code-tabs">
+                        <div class="code-tab active" data-code="html">
+                            <i class="fab fa-html5"></i>
+                            HTML
+                        </div>
+                        <div class="code-tab" data-code="css">
+                            <i class="fab fa-css3-alt"></i>
+                            CSS
+                        </div>
+                        <div class="code-tab" data-code="js">
+                            <i class="fab fa-js-square"></i>
+                            JavaScript
+                        </div>
+                    </div>
+                    <div class="code-content">
+                        <div class="code-block active" id="htmlCode">
+                            <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Generated Project&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h1&gt;Hello, World!&lt;/h1&gt;
+        &lt;p&gt;This is your generated project.&lt;/p&gt;
+        &lt;button id="actionBtn"&gt;Click me!&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                        </div>
+                        <div class="code-content">
+                            <div class="code-block active" id="htmlCode">
+                              <pre><code class="language-html">
+                          <!DOCTYPE html>
+                          <html lang="en">
+                          <head>
+                            <meta charset="UTF-8" />
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                            <title>Generated Project</title>
+                            <link rel="stylesheet" href="style.css" />
+                          </head>
+                          <body>
+                            <div class="container">
+                              <h1>Hello, World!</h1>
+                              <p>This is your generated project.</p>
+                              <button id="actionBtn">Click me!</button>
+                            </div>
+                            <script src="script.js"></script>
+                          </body>
+                          </html>
+                              </code></pre>
+                            </div>
+                          
+                            <div class="code-block" id="cssCode">
+                              <pre><code class="language-css">
+                          * {
+                            margin: 0;
+                            padding: 0;
+                            box-sizing: border-box;
+                          }
+                          
+                          body {
+                            font-family: 'Poppins', sans-serif;
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            min-height: 100vh;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                          }
+                          
+                          .container {
+                            text-align: center;
+                            padding: 2rem;
+                            background: rgba(255, 255, 255, 0.1);
+                            backdrop-filter: blur(10px);
+                            border-radius: 20px;
+                            border: 1px solid rgba(255, 255, 255, 0.2);
+                            color: white;
+                          }
+                          
+                          h1 {
+                            font-size: 3rem;
+                            margin-bottom: 1rem;
+                            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            background-clip: text;
+                          }
+                          
+                          p {
+                            font-size: 1.2rem;
+                            margin-bottom: 2rem;
+                            opacity: 0.9;
+                          }
+                          
+                          button {
+                            padding: 12px 30px;
+                            border: none;
+                            border-radius: 50px;
+                            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+                            color: white;
+                            font-size: 1rem;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+                          }
+                          
+                          button:hover {
+                            transform: translateY(-3px);
+                            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                          }
+                              </code></pre>
+                            </div>
+                          
+                            <div class="code-block" id="jsCode">
+                              <pre><code class="language-javascript">
+                          document.addEventListener('DOMContentLoaded', function () {
+                            const button = document.getElementById('actionBtn');
+                          
+                            button.addEventListener('click', function () {
+                              button.style.transform = 'scale(0.95)';
+                              setTimeout(() => {
+                                button.style.transform = 'scale(1)';
+                              }, 100);
+                          
+                              alert('Hello from Magnus! Your project is ready to customize.');
+                            });
+                          
+                            createParticles();
+                          });
+                          
+                          function createParticles() {
+                            const container = document.querySelector('.container');
+                          
+                            for (let i = 0; i < 20; i++) {
+                              const particle = document.createElement('div');
+                              particle.style.cssText = `
+                                position: absolute;
+                                width: 4px;
+                                height: 4px;
+                                background: rgba(255, 255, 255, 0.6);
+                                border-radius: 50%;
+                                pointer-events: none;
+                                animation: float ${Math.random() * 3 + 2}s ease-in-out infinite;
+                                left: ${Math.random() * 100}%;
+                                top: ${Math.random() * 100}%;
+                                animation-delay: ${Math.random() * 2}s;
+                              `;
+                              container.appendChild(particle);
+                            }
+                          }
+                          
+                          const style = document.createElement('style');
+                          style.textContent = `
+                          @keyframes float {
+                            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+                            25% { transform: translateY(-20px) rotate(90deg); opacity: 0.8; }
+                            50% { transform: translateY(-10px) rotate(180deg); opacity: 0.5; }
+                            75% { transform: translateY(-15px) rotate(270deg); opacity: 0.7; }
+                          }
+                          `;
+                          document.head.appendChild(style);
+                              </code></pre>
+                            </div>
+                          </div>
+                          
+                </div>
+
+                <!-- Error State -->
+                <div class="error-container" id="errorContainer" style="display: none;">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3 class="error-title">Generation Failed</h3>
+                    <p class="error-message">Something went wrong while generating your code. Please try again.</p>
+                    <button class="retry-btn" onclick="retryGeneration()">
+                        <i class="fas fa-redo"></i>
+                        Retry Generation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Current time update
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: true 
+            });
+            document.getElementById('currentTime').textContent = timeString;
+        }
+        
+        // Update time immediately and then every minute
+        updateTime();
+        setInterval(updateTime, 60000);
+
+        // Tab switching functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Hide all panels
+                document.getElementById('previewPanel').classList.remove('active');
+                document.getElementById('codePanel').classList.remove('active');
+                document.getElementById('generationView').style.display = 'flex';
+                
+                // Show selected panel
+                const tabType = this.getAttribute('data-tab');
+                if (tabType === 'preview') {
+                    document.getElementById('generationView').style.display = 'none';
+                    document.getElementById('previewPanel').classList.add('active');
+                    loadPreview();
+                } else if (tabType === 'code') {
+                    document.getElementById('generationView').style.display = 'none';
+                    document.getElementById('codePanel').classList.add('active');
+                }
+            });
+        });
+
+        // Code tab switching
+        document.querySelectorAll('.code-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all code tabs
+                document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Hide all code blocks
+                document.querySelectorAll('.code-block').forEach(block => block.classList.remove('active'));
+                
+                // Show selected code block
+                const codeType = this.getAttribute('data-code');
+                document.getElementById(codeType + 'Code').classList.add('active');
+            });
+        });
+
+        // Generation simulation
+        function simulateGeneration() {
+            const steps = [
+                { id: 'analyzeStep', delay: 1000 },
+                { id: 'htmlStep', delay: 2000 },
+                { id: 'cssStep', delay: 3000 },
+                { id: 'jsStep', delay: 4000 },
+                { id: 'finalizeStep', delay: 5000 }
+            ];
+            
+            let currentProgress = 0;
+            const totalSteps = steps.length;
+            
+            steps.forEach((step, index) => {
+                setTimeout(() => {
+                    // Mark current step as active
+                    if (index > 0) {
+                        // Mark previous step as completed
+                        const prevStep = document.getElementById(steps[index - 1].id);
+                        prevStep.classList.remove('active');
+                        prevStep.classList.add('completed');
+                        prevStep.querySelector('.progress-status').innerHTML = '<i class="fas fa-check"></i><span>Complete</span>';
+                    }
+                    
+                    // Mark current step as active
+                    const currentStep = document.getElementById(step.id);
+                    currentStep.classList.add('active');
+                    currentStep.querySelector('.progress-status').innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Processing...</span>';
+                    
+                    // Update progress bar
+                    currentProgress = ((index + 1) / totalSteps) * 100;
+                    document.getElementById('progressFill').style.width = currentProgress + '%';
+                    document.getElementById('progressPercent').textContent = Math.round(currentProgress) + '%';
+                    
+                    // Complete final step
+                    if (index === totalSteps - 1) {
+                        setTimeout(() => {
+                            currentStep.classList.remove('active');
+                            currentStep.classList.add('completed');
+                            currentStep.querySelector('.progress-status').innerHTML = '<i class="fas fa-check"></i><span>Complete</span>';
+                            
+                            // Update generation title and subtitle
+                            document.getElementById('generationTitle').textContent = 'Generation Complete!';
+                            document.getElementById('generationSubtitle').textContent = 'Your project has been successfully generated. Click on Preview or Code to explore.';
+                            document.getElementById('generationIcon').className = 'fas fa-check-circle';
+                        }, 500);
+                    }
+                }, step.delay);
+            });
+        }
+
+        // Load preview content
+        function loadPreview() {
+            const iframe = document.getElementById('previewIframe');
+            const htmlCode = document.querySelector('#htmlCode code').textContent;
+            const cssCode = document.querySelector('#cssCode code').textContent;
+            const jsCode = document.querySelector('#jsCode code').textContent;
+            
+            const fullHTML = htmlCode.replace(
+                '<link rel="stylesheet" href="style.css">',
+                `<style>${cssCode}</style>`
+            ).replace(
+                '<script src="script.js"></script>',
+                `<script>${jsCode}</script>`
+            );
+            
+            iframe.srcdoc = fullHTML;
+        }
+
+        // Control buttons functionality
+        document.getElementById('mobileView').addEventListener('click', function() {
+            const iframe = document.getElementById('previewIframe');
+            iframe.style.maxWidth = '375px';
+            iframe.style.margin = '0 auto';
+            this.classList.add('active');
+            document.getElementById('desktopView').classList.remove('active');
+        });
+
+        document.getElementById('desktopView').addEventListener('click', function() {
+            const iframe = document.getElementById('previewIframe');
+            iframe.style.maxWidth = '100%';
+            iframe.style.margin = '0';
+            this.classList.add('active');
+            document.getElementById('mobileView').classList.remove('active');
+        });
+
+        document.getElementById('refreshBtn').addEventListener('click', function() {
+            this.querySelector('i').style.animation = 'spin 0.5s linear';
+            setTimeout(() => {
+                this.querySelector('i').style.animation = '';
+                loadPreview();
+            }, 500);
+        });
+
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // Create zip file simulation
+            alert('Download feature will be available soon! For now, you can copy the code from the Code tab.');
+        });
+
+        document.getElementById('shareBtn').addEventListener('click', function() {
+            // Copy share link to clipboard
+            navigator.clipboard.writeText('https://preview.magnus.dev/project/12345').then(() => {
+                // Show temporary success message
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-check"></i>';
+                this.style.background = 'rgba(0, 255, 128, 0.2)';
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.style.background = '';
+                }, 2000);
+            });
+        });
+
+        document.getElementById('openInNew').addEventListener('click', function() {
+            window.open('https://preview.magnus.dev/project/12345', '_blank');
+        });
+
+        // Copy prompt functionality
+        function copyPrompt() {
+            const promptText = "Create a beautiful landing page with gradient background and interactive elements";
+            navigator.clipboard.writeText(promptText).then(() => {
+                // Show temporary success message
+                const icon = event.target;
+                const originalClass = icon.className;
+                icon.className = 'fas fa-check';
+                icon.style.color = '#00ff80';
+                setTimeout(() => {
+                    icon.className = originalClass;
+                    icon.style.color = '';
+                }, 2000);
+            });
+        }
+
+        // Retry generation
+        function retryGeneration() {
+            document.getElementById('errorContainer').style.display = 'none';
+            document.getElementById('generationView').style.display = 'flex';
+            
+            // Reset all progress items
+            document.querySelectorAll('.progress-item').forEach(item => {
+                item.classList.remove('active', 'completed');
+                item.querySelector('.progress-status').innerHTML = '<i class="fas fa-hourglass-start"></i><span>Pending</span>';
+            });
+            
+            // Reset progress bar
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('progressPercent').textContent = '0%';
+            
+            // Reset titles
+            document.getElementById('generationTitle').textContent = 'Analyzing your request...';
+            document.getElementById('generationSubtitle').textContent = 'Please wait while Magnus generates your code';
+            document.getElementById('generationIcon').className = 'fas fa-magic';
+            
+            // Start simulation again
+            simulateGeneration();
+        }
+
+        // Start generation simulation on page load
+        setTimeout(() => {
+            simulateGeneration();
+        }, 1000);
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.control-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px) scale(1.05)';
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        });
+
+        // Prism.js highlight on load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof Prism !== 'undefined') {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>
