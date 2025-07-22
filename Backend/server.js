@@ -81,7 +81,7 @@ app.post("/register", async (req, res) => {
           <h3>Welcome, ${fullName}!</h3>
           <p>Thank you for registering with MagnusAI.</p>
           <p>Click the button below to verify your account and log in:</p>
-          <a href="http://localhost:3000/login" style="
+          <a href="https://magnusai-ncz8.onrender.com/login" style="
             padding: 10px 15px;
             background-color: #4CAF50;
             color: white;
