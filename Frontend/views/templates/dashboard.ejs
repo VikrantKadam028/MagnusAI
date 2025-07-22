@@ -881,7 +881,7 @@
         enhanceBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin fa-lg" style="color: #ffffff"></i> Enhancing...`;
 
         try {
-          const res = await fetch("http://localhost:3000/api/enhance", {
+          const res = await fetch("https://magnusai-ncz8.onrender.com/api/enhance", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt }),
