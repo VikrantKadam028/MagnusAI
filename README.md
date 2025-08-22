@@ -1,9 +1,5 @@
 # MagnusAI
 
-[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/VikrantKadam028/MagnusAI/main.yml?branch=main)]()
-[![npm version](https://img.shields.io/npm/v/magnusai)](https://www.npmjs.com/package/magnusai)
-
 ## Table of Contents
 
 - [Description](#description)
